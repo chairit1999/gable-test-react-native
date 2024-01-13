@@ -1,15 +1,11 @@
 import LoginScreen from "./components/login";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { AppState, AppStateStatus } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import QuestionScreen from "./components/question";
 import questionData from "./assets/question.json";
-import {
-  resetLeaderBoardData,
-  storeLeaderBoardData,
-  storeQuestionData,
-} from "./util/storage";
+import { resetLeaderBoardData, storeQuestionData } from "./util/storage";
 import LeaderBoard from "./components/leader-board";
 
 export type RootStackParamList = {

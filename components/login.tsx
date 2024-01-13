@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Button,
 } from "react-native";
 import { RootStackParamList } from "../App";
 const styles = StyleSheet.create({

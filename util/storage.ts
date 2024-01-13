@@ -41,8 +41,6 @@ const storeLeaderBoardData = async (name: string, point: number) => {
 const getLeaderBoardData = async (): Promise<LeaderBoardType[] | undefined> => {
   try {
     const jsonValue = await AsyncStorage.getItem("leaderBoard");
-    console.log(jsonValue);
-
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.log("error getQuestionData : ", e);
