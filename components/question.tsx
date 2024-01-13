@@ -1,33 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Button,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from "react-native";
-import StepIndicator from "react-native-step-indicator";
-import questionData from "../assets/question.json";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import { QuestionInterface } from "../App";
-import { getQuestionData } from "../util/storage";
+import { QuestionType, RootStackParamList } from "../App";
+import { getQuestionData, storeLeaderBoardData } from "../util/storage";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-interface Props {
-  navigation: any;
-  route: any;
-}
+type Props = NativeStackScreenProps<RootStackParamList, "Question">;
+
 export default function QuestionScreen({ navigation, route }: Props) {
   const numberQuestionPerPage = 5;
+  const choiceIndex = ["A", "B", "C", "D"];
   const [currentPage, setCurrentPage] = useState(0);
-  const [questions, setQuestions] = useState<QuestionInterface[][]>([]);
+  const [questions, setQuestions] = useState<QuestionType[][]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const questions = await getQuestionData();
-      const questionPerPage: QuestionInterface[][] = [];
+      const questionPerPage: QuestionType[][] = [];
       questions?.forEach((item) => {
         if (
           !questionPerPage.length ||
@@ -42,10 +31,24 @@ export default function QuestionScreen({ navigation, route }: Props) {
     fetchData();
   }, []);
 
-  const choiceIndex = ["A", "B", "C", "D"];
-  const onStepPress = (position: number) => {
-    setCurrentPage(position);
+  const calculatePoint = () => {
+    return questions.flat().reduce((point, currentQuestion) => {
+      if (
+        currentQuestion.selectOption &&
+        currentQuestion.answer ===
+          currentQuestion.options[currentQuestion?.selectOption - 1].id
+      )
+        point++;
+      return point;
+    }, 0);
   };
+
+  const onSubmit = async () => {
+    const userName = route.params?.name;
+    await storeLeaderBoardData(userName, calculatePoint());
+    navigation.navigate("LeaderBoard");
+  };
+
   return (
     <View style={styles.container}>
       {questions && questions.length > 0 && (
@@ -53,7 +56,7 @@ export default function QuestionScreen({ navigation, route }: Props) {
           {questions.map((questionInPage, pageIndex) => {
             const pageKey = `page-${pageIndex + 1}`;
             return (
-              <ProgressStep key={pageKey} label="">
+              <ProgressStep key={pageKey} label="" onSubmit={onSubmit}>
                 {questionInPage.map((question, questionIndex) => {
                   const questionKey = `${pageKey}-question-${questionIndex}`;
                   return (

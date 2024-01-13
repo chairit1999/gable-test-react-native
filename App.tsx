@@ -5,27 +5,39 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import QuestionScreen from "./components/question";
 import questionData from "./assets/question.json";
-import { storeQuestionData } from "./util/storage";
-const Stack = createNativeStackNavigator();
-export interface QuestionInterface {
-  id: number;
+import {
+  resetLeaderBoardData,
+  storeLeaderBoardData,
+  storeQuestionData,
+} from "./util/storage";
+import LeaderBoard from "./components/leader-board";
+
+export type RootStackParamList = {
+  Login: undefined;
+  Question: { name: string };
+  LeaderBoard: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+export type QuestionType = {
   question: string;
-  options: Array<{
-    id: number;
-    name: string;
-  }>;
+  options: Array<OptionType>;
   answer: number;
   selectOption?: number;
-}
+};
+
+type OptionType = {
+  id: number;
+  name: string;
+};
 
 export default function App() {
-  const [appState, setAppState] = useState(AppState.currentState);
-
   useEffect(() => {
     const handleAppStateChange = async (nextAppState: AppStateStatus) => {
-      setAppState(nextAppState);
       if (nextAppState === "active") {
         await storeQuestionData(randomQuestion());
+        await resetLeaderBoardData();
       }
     };
     const event = AppState.addEventListener("change", handleAppStateChange);
@@ -34,17 +46,28 @@ export default function App() {
     };
   }, []);
 
-  const randomQuestion = () => {
-    const newQuestionData = Array(20).fill(questionData[0]);
-    console.log(newQuestionData[19]);
+  const randomOption = (option: OptionType[]) => {
+    let countOption = option.length;
+    const options: OptionType[] = [];
+    for (let i = 0; i < 4; i++) {
+      const randomIndex = Math.floor(Math.random() * countOption);
+      options.push(option[randomIndex]);
+      option.splice(randomIndex, 1);
+      countOption -= 1;
+    }
+    return options;
+  };
 
-    let countQuestionData = newQuestionData.length;
+  const randomQuestion = () => {
+    let countQuestionData = questionData.length;
     const numberOfRandom = 20;
-    const questions: QuestionInterface[] = [];
+    const questions: QuestionType[] = [];
     for (let i = 0; i < numberOfRandom; i++) {
       const randomIndex = Math.floor(Math.random() * countQuestionData);
-      questions.push({ ...newQuestionData[randomIndex], selectOption: null });
-      newQuestionData.splice(randomIndex, 1);
+      const question = questionData[randomIndex];
+      question.options = randomOption(question.options);
+      questions.push({ ...question });
+      questionData.splice(randomIndex, 1);
       countQuestionData -= 1;
     }
     return questions;
@@ -54,7 +77,20 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Question" component={QuestionScreen} />
+        <Stack.Screen
+          name="Question"
+          component={QuestionScreen}
+          options={{
+            headerLeft: () => <></>,
+          }}
+        />
+        <Stack.Screen
+          name="LeaderBoard"
+          component={LeaderBoard}
+          options={{
+            headerLeft: () => <></>,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

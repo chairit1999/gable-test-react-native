@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import {
   View,
@@ -5,15 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Button,
 } from "react-native";
+import { RootStackParamList } from "../App";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     resizeMode: "cover",
     backgroundColor: "antiquewhite",
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
+    flexDirection: "row",
   },
   content: {
     flex: 1,
@@ -58,9 +59,8 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Props {
-  navigation: any;
-}
+type Props = NativeStackScreenProps<RootStackParamList>;
+
 export default function LoginScreen({ navigation }: Props) {
   const [username, setUsername] = useState("");
 
@@ -74,7 +74,6 @@ export default function LoginScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.overlay} />
       <View style={styles.content}>
         <Text style={styles.title}>Enter player name</Text>
         <View style={styles.inputContainer}>
@@ -85,6 +84,14 @@ export default function LoginScreen({ navigation }: Props) {
         </View>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Play</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, { position: "absolute", bottom: 50 }]}
+          onPress={() => {
+            navigation.navigate("LeaderBoard");
+          }}
+        >
+          <Text style={styles.buttonText}>LeaderBoard</Text>
         </TouchableOpacity>
       </View>
     </View>
