@@ -50,29 +50,32 @@ export default function QuestionScreen({ navigation, route }: Props) {
     <View style={styles.container}>
       {questions && questions.length > 0 && (
         <ProgressSteps>
-          {questions.map((questionInPage, index) => {
+          {questions.map((questionInPage, pageIndex) => {
+            const pageKey = `page-${pageIndex + 1}`;
             return (
-              <ProgressStep key={`page-${index + 1}`} label="">
+              <ProgressStep key={pageKey} label="">
                 {questionInPage.map((question, questionIndex) => {
+                  const questionKey = `${pageKey}-question-${questionIndex}`;
                   return (
-                    <View key={`page-${index + 1}-question-${questionIndex}`}>
+                    <View key={questionKey}>
                       <Text style={styles.titleQuestion}>
-                        {index * numberQuestionPerPage + (questionIndex + 1)}.{" "}
-                        {question?.question}
+                        {pageIndex * numberQuestionPerPage +
+                          (questionIndex + 1)}
+                        . {question?.question}
                       </Text>
                       <View style={styles.option}>
                         {question?.options?.map((option, optionIndex) => {
+                          const optionKey = `${questionKey}-option-${optionIndex}`;
                           const isActiveOption =
                             question.selectOption === optionIndex + 1;
                           return (
                             <TouchableWithoutFeedback
-                              key={`page-${
-                                index + 1
-                              }-question-${questionIndex}-option-${optionIndex}`}
+                              key={optionKey}
                               onPress={() => {
                                 const newValue = [...questions];
-                                newValue[index][questionIndex].selectOption =
-                                  optionIndex + 1;
+                                newValue[pageIndex][
+                                  questionIndex
+                                ].selectOption = optionIndex + 1;
                                 setQuestions(newValue);
                               }}
                             >
