@@ -10,7 +10,6 @@ type Props = NativeStackScreenProps<RootStackParamList, "Question">;
 export default function QuestionScreen({ navigation, route }: Props) {
   const numberQuestionPerPage = 5;
   const choiceIndex = ["A", "B", "C", "D"];
-  const [currentPage, setCurrentPage] = useState(0);
   const [questions, setQuestions] = useState<QuestionType[][]>([]);
 
   useEffect(() => {

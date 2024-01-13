@@ -34,7 +34,7 @@ const storeLeaderBoardData = async (name: string, point: number) => {
     const jsonValue = JSON.stringify(leaderBoard);
     await AsyncStorage.setItem("leaderBoard", jsonValue);
   } catch (e) {
-    console.log("error storeQuestionData : ", e);
+    console.log("error storeLeaderBoardData : ", e);
   }
 };
 
@@ -43,7 +43,7 @@ const getLeaderBoardData = async (): Promise<LeaderBoardType[] | undefined> => {
     const jsonValue = await AsyncStorage.getItem("leaderBoard");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
-    console.log("error getQuestionData : ", e);
+    console.log("error getLeaderBoardData : ", e);
   }
 };
 
@@ -52,7 +52,7 @@ const resetLeaderBoardData = async () => {
     const jsonValue = JSON.stringify([]);
     await AsyncStorage.setItem("leaderBoard", jsonValue);
   } catch (e) {
-    console.log("error storeQuestionData : ", e);
+    console.log("error resetLeaderBoardData : ", e);
   }
 };
 
