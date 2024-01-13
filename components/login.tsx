@@ -8,6 +8,46 @@ import {
   StyleSheet,
 } from "react-native";
 import { RootStackParamList } from "../App";
+
+type Props = NativeStackScreenProps<RootStackParamList>;
+
+export default function LoginScreen({ navigation }: Props) {
+  const [username, setUsername] = useState("");
+
+  const handleLogin = () => {
+    if (username.length === 0) {
+      alert("Please enter your name");
+    } else {
+      navigation.navigate("Question", { name: username });
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Enter player name</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setUsername(text)}
+          />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>PLAY</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, { marginTop: 10, backgroundColor: "#ff6969" }]}
+          onPress={() => {
+            navigation.navigate("LeaderBoard");
+          }}
+        >
+          <Text style={styles.buttonText}>LEADER BOARD</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,42 +101,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-type Props = NativeStackScreenProps<RootStackParamList>;
-
-export default function LoginScreen({ navigation }: Props) {
-  const [username, setUsername] = useState("");
-
-  const handleLogin = () => {
-    if (username.length === 0) {
-      alert("Please enter your name");
-    } else {
-      navigation.navigate("Question", { name: username });
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Enter player name</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => setUsername(text)}
-          />
-        </View>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>PLAY</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, { marginTop: 10, backgroundColor: "#ff6969" }]}
-          onPress={() => {
-            navigation.navigate("LeaderBoard");
-          }}
-        >
-          <Text style={styles.buttonText}>LEADER BOARD</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
