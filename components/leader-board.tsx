@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { getLeaderBoardData } from "../util/storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
@@ -17,43 +24,50 @@ export default function LeaderBoard({ navigation }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       const leaderBoard = await getLeaderBoardData();
-      setLeaderBoard(leaderBoard || []);
+      if (leaderBoard) {
+        setLeaderBoard(leaderBoard);
+      }
     };
     fetchData();
   }, []);
 
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>คะแนนสูงสุด</Text>
-      </View>
-      {leaderBoard &&
-        leaderBoard.map((item, index) => {
-          return (
-            <View key={index} style={styles.item}>
-              <Text style={[styles.textItem]}>{index + 1}.</Text>
-              <Text style={[styles.textItem, { flex: 4 }]}>{item.name}</Text>
-              <Text style={[styles.textItem, { flex: 3, textAlign: "right" }]}>
-                {item.point}
-              </Text>
-              <Text style={[styles.textItem, { marginLeft: 5 }]}>point</Text>
-            </View>
-          );
-        })}
-
-      <View
-        style={{
-          position: "absolute",
-          bottom: 50,
-          margin: "auto",
-        }}
-      >
-        <Button
-          title="Back To Home"
+      <ScrollView style={{ width: "100%" }}>
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.title}>LEADER BOARD</Text>
+          </View>
+          {leaderBoard &&
+            leaderBoard.map((item, index) => {
+              return (
+                <View key={index} style={styles.item}>
+                  <View style={styles.pointContainer}>
+                    <Text style={[styles.textName]}>{item.name}</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={[styles.textPoint]}>{item.point}</Text>
+                      <Text style={[styles.textPoint, { marginLeft: 5 }]}>
+                        point
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.number}>
+                    <Text style={styles.textNumber}>{index + 1}</Text>
+                  </View>
+                </View>
+              );
+            })}
+        </View>
+      </ScrollView>
+      <View style={styles.positionNextButton}>
+        <TouchableOpacity
+          style={styles.nextButton}
           onPress={() => {
             navigation.navigate("Login");
           }}
-        ></Button>
+        >
+          <Text style={styles.nextButtonText}>BACK TO START PAGE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -61,23 +75,75 @@ export default function LeaderBoard({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 25,
     flexDirection: "column",
     flex: 1,
-    backgroundColor: "antiquewhite",
+    backgroundColor: "#EDE8E3",
     alignItems: "center",
+  },
+  pointContainer: {
+    flex: 1,
+    flexDirection: "column",
+  },
+  number: {
+    flex: 1,
+  },
+  textNumber: {
+    textAlign: "right",
+    marginRight: 20,
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "red",
   },
   title: {
     fontSize: 26,
     marginBottom: 20,
     marginTop: 10,
+    fontWeight: "600",
   },
   item: {
-    width: "70%",
+    width: "80%",
+    backgroundColor: "white",
+    height: 60,
+    borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 10,
   },
-  textItem: {
+  textName: {
+    marginTop: 5,
+    marginLeft: 10,
     fontSize: 18,
+    fontWeight: "500",
+  },
+  textPoint: {
+    fontSize: 18,
+    marginLeft: 10,
+    color: "#B7B7B7",
+  },
+  nextButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  nextButton: {
+    marginTop: 10,
+    height: 50,
+    width: "90%",
+    borderRadius: 8,
+    backgroundColor: "#31CD63",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  positionNextButton: {
+    zIndex: 2,
+    backgroundColor: "#EDE8E3",
+    position: "absolute",
+    paddingBottom: 20,
+    bottom: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

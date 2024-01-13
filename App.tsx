@@ -29,19 +29,6 @@ type OptionType = {
 };
 
 export default function App() {
-  useEffect(() => {
-    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
-      if (nextAppState === "active") {
-        await storeQuestionData(randomQuestion());
-        await resetLeaderBoardData();
-      }
-    };
-    const event = AppState.addEventListener("change", handleAppStateChange);
-    return () => {
-      event.remove();
-    };
-  }, []);
-
   const randomOption = (option: OptionType[]) => {
     let countOption = option.length;
     const options: OptionType[] = [];
@@ -69,15 +56,38 @@ export default function App() {
     return questions;
   };
 
+  useEffect(() => {
+    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+      if (nextAppState === "active") {
+        await storeQuestionData(randomQuestion());
+        await resetLeaderBoardData();
+      }
+    };
+    const event = AppState.addEventListener("change", handleAppStateChange);
+    return () => {
+      event.remove();
+    };
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: "" }}
+        />
         <Stack.Screen
           name="Question"
           component={QuestionScreen}
           options={{
             headerLeft: () => <></>,
+            title: "QUESTION",
+            headerTitleAlign: "center",
           }}
         />
         <Stack.Screen
@@ -85,6 +95,8 @@ export default function App() {
           component={LeaderBoard}
           options={{
             headerLeft: () => <></>,
+            title: "LEADER BOARD",
+            headerTitleAlign: "center",
           }}
         />
       </Stack.Navigator>

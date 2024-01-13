@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { QuestionType, RootStackParamList } from "../App";
 import { getQuestionData, storeLeaderBoardData } from "../util/storage";
@@ -10,7 +17,18 @@ type Props = NativeStackScreenProps<RootStackParamList, "Question">;
 export default function QuestionScreen({ navigation, route }: Props) {
   const numberQuestionPerPage = 5;
   const choiceIndex = ["A", "B", "C", "D"];
+  const [isDisableNext, setIsDisableNext] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
   const [questions, setQuestions] = useState<QuestionType[][]>([]);
+
+  useEffect(() => {
+    const filterIsAnswer = questions[currentPage]?.filter(
+      (item) => item.selectOption
+    );
+    if (filterIsAnswer?.length === numberQuestionPerPage) {
+      setIsDisableNext(false);
+    }
+  }, [questions]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,14 +66,28 @@ export default function QuestionScreen({ navigation, route }: Props) {
     navigation.navigate("LeaderBoard");
   };
 
+  const onNextPage = async () => {
+    setIsDisableNext(true);
+    if (currentPage === questions.length - 1) {
+      onSubmit();
+    } else {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {questions && questions.length > 0 && (
-        <ProgressSteps>
+        <ProgressSteps
+          activeStep={currentPage}
+          disabledStepNumColor={"white"}
+          disabledStepIconColor={"#747475"}
+          progressBarColor={"#747475"}
+        >
           {questions.map((questionInPage, pageIndex) => {
             const pageKey = `page-${pageIndex + 1}`;
             return (
-              <ProgressStep key={pageKey} label="" onSubmit={onSubmit}>
+              <ProgressStep key={pageKey} label="" removeBtnRow={true}>
                 {questionInPage.map((question, questionIndex) => {
                   const questionKey = `${pageKey}-question-${questionIndex}`;
                   return (
@@ -84,7 +116,7 @@ export default function QuestionScreen({ navigation, route }: Props) {
                               <View
                                 style={[
                                   styles.boxOption,
-                                  isActiveOption ? styles.activeChoice : {},
+                                  isActiveOption ? styles.activeBoxChoice : {},
                                 ]}
                               >
                                 <View style={styles.containerChoiceIndex}>
@@ -92,7 +124,14 @@ export default function QuestionScreen({ navigation, route }: Props) {
                                     {choiceIndex[optionIndex]}
                                   </Text>
                                 </View>
-                                <Text style={styles.choiceText}>
+                                <Text
+                                  style={[
+                                    styles.choiceText,
+                                    isActiveOption
+                                      ? styles.activeTextChoice
+                                      : {},
+                                  ]}
+                                >
                                   {option?.name}
                                 </Text>
                               </View>
@@ -108,12 +147,50 @@ export default function QuestionScreen({ navigation, route }: Props) {
           })}
         </ProgressSteps>
       )}
+      {questions && questions.length > 0 && (
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity
+            disabled={isDisableNext}
+            style={[
+              styles.nextButton,
+              isDisableNext ? { backgroundColor: "#747475" } : {},
+            ]}
+            onPress={() => {
+              onNextPage();
+            }}
+          >
+            <Text style={styles.nextButtonText}>CONTINUE</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "antiquewhite" },
+  nextButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  nextButton: {
+    marginTop: 10,
+    marginBottom: 10,
+    height: 50,
+    width: "90%",
+    borderRadius: 8,
+    backgroundColor: "#31CD63",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: { paddingTop: 30, flex: 1, backgroundColor: "#EDE8E3" },
   titleQuestion: {
     fontSize: 20,
     color: "navy",
@@ -131,7 +208,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     width: "90%",
-    height: 40,
+    height: 50,
     marginTop: 10,
     borderRadius: 5,
   },
@@ -143,7 +220,7 @@ const styles = StyleSheet.create({
   choiceIndex: {
     textAlign: "center",
     textAlignVertical: "center",
-    backgroundColor: "antiquewhite",
+    backgroundColor: "#EDE8E3",
     height: 30,
     width: 30,
     borderRadius: 20,
@@ -157,7 +234,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
-  activeChoice: {
-    backgroundColor: "chartreuse",
+  activeBoxChoice: {
+    backgroundColor: "#45C486",
+  },
+  activeTextChoice: {
+    color: "white",
   },
 });

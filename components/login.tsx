@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     resizeMode: "cover",
-    backgroundColor: "antiquewhite",
+    backgroundColor: "#EDE8E3",
     flexDirection: "row",
   },
   content: {
@@ -30,6 +30,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     marginBottom: 20,
+    height: 50,
+    backgroundColor: "white",
+    borderRadius: 8,
   },
   label: {
     fontSize: 16,
@@ -37,18 +40,19 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
+    height: 50,
+    borderRadius: 8,
     paddingHorizontal: 10,
     color: "black",
   },
   button: {
-    backgroundColor: "#007AFF",
-    borderRadius: 5,
+    backgroundColor: "#31CD63",
+    marginTop: 3,
+    borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 20,
+    width: "100%",
+    height: 50,
   },
   buttonText: {
     color: "#fff",
@@ -82,15 +86,15 @@ export default function LoginScreen({ navigation }: Props) {
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Play</Text>
+          <Text style={styles.buttonText}>PLAY</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, { position: "absolute", bottom: 50 }]}
+          style={[styles.button, { marginTop: 10, backgroundColor: "#ff6969" }]}
           onPress={() => {
             navigation.navigate("LeaderBoard");
           }}
         >
-          <Text style={styles.buttonText}>LeaderBoard</Text>
+          <Text style={styles.buttonText}>LEADER BOARD</Text>
         </TouchableOpacity>
       </View>
     </View>
