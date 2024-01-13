@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 18,
     fontWeight: "500",
+    fontFamily: "Noto Sans Thai",
   },
   textPoint: {
     fontSize: 18,

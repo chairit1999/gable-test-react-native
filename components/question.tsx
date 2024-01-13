@@ -45,6 +45,7 @@ export default function QuestionScreen({ navigation, route }: Props) {
       });
       setQuestions(questionPerPage);
     };
+
     fetchData();
   }, []);
 
@@ -196,6 +197,7 @@ const styles = StyleSheet.create({
     color: "navy",
     textAlign: "center",
     fontWeight: "600",
+    fontFamily: "Noto Sans Thai",
   },
   option: {
     flex: 1,
@@ -233,6 +235,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     fontSize: 18,
     fontWeight: "600",
+    fontFamily: "Noto Sans Thai",
   },
   activeBoxChoice: {
     backgroundColor: "#45C486",

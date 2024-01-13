@@ -7,6 +7,11 @@ import QuestionScreen from "./components/question";
 import questionData from "./assets/question.json";
 import { resetLeaderBoardData, storeQuestionData } from "./util/storage";
 import LeaderBoard from "./components/leader-board";
+import * as Font from "expo-font";
+
+let customFonts = {
+  "Noto Sans Thai": require("./assets/fonts/NotoSansThai.ttf"),
+};
 
 export type RootStackParamList = {
   Login: undefined;
@@ -58,6 +63,7 @@ export default function App() {
 
   useEffect(() => {
     const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+      await Font.loadAsync(customFonts);
       if (nextAppState === "active") {
         await storeQuestionData(randomQuestion());
         await resetLeaderBoardData();
