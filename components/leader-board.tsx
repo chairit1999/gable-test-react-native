@@ -36,7 +36,7 @@ export default function LeaderBoard({ navigation }: Props) {
               <Text style={[styles.textItem, { flex: 3, textAlign: "right" }]}>
                 {item.point}
               </Text>
-              <Text style={[styles.textItem, { marginLeft: 5 }]}>คะแนน</Text>
+              <Text style={[styles.textItem, { marginLeft: 5 }]}>point</Text>
             </View>
           );
         })}
