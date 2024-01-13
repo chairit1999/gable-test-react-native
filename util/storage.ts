@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { QuestionInterface } from "../App";
 
 const storeQuestionData = async (value: any) => {
   try {
@@ -9,7 +10,7 @@ const storeQuestionData = async (value: any) => {
   }
 };
 
-const getQuestionData = async () => {
+const getQuestionData = async (): Promise<QuestionInterface[] | undefined> => {
   try {
     const jsonValue = await AsyncStorage.getItem("question");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -17,3 +18,5 @@ const getQuestionData = async () => {
     console.log("error getQuestionData : ", e);
   }
 };
+
+export { storeQuestionData, getQuestionData };
