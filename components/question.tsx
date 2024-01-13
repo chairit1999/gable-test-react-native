@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
