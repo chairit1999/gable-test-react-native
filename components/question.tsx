@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { QuestionType, RootStackParamList } from "../App";
@@ -76,7 +77,13 @@ export default function QuestionScreen({ navigation, route }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        questions.length === 0 ? { justifyContent: "center" } : {},
+      ]}
+    >
+      {questions.length === 0 && <ActivityIndicator size={"large"} />}
       {questions && questions.length > 0 && (
         <ProgressSteps
           activeStep={currentPage}
