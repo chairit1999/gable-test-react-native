@@ -32,7 +32,7 @@ export default function LeaderBoard({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{ width: "100%" }}>
+      <ScrollView style={{ width: "100%", flex: 1 }}>
         <View style={styles.container}>
           <View>
             <Text style={styles.title}>LEADER BOARD</Text>
@@ -74,9 +74,9 @@ export default function LeaderBoard({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: 25,
     flexDirection: "column",
-    flex: 1,
     backgroundColor: "#EDE8E3",
     alignItems: "center",
   },
@@ -137,11 +137,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   positionNextButton: {
-    zIndex: 2,
     backgroundColor: "#EDE8E3",
-    position: "absolute",
     paddingBottom: 20,
-    bottom: 0,
+    height: 100,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
